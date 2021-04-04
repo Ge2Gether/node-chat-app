@@ -1,8 +1,8 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '--build-arg', 'ENV=production', '-t', 'gcr.io/$PROJECT_ID/node-chat-app:$SHORT_SHA', '.' ]
+  args: [ 'build', '--build-arg', 'ENV=production', '-t', 'gcr.io/$PROJECT_ID/node-chat-server:$SHORT_SHA', '.' ]
 - name: 'gcr.io/cloud-builders/docker'
-  args: [ 'push', 'gcr.io/$PROJECT_ID/node-chat-app:$SHORT_SHA' ]
+  args: [ 'push', 'gcr.io/$PROJECT_ID/node-chat-server:$SHORT_SHA' ]
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: bash
   args:
@@ -27,9 +27,9 @@ steps:
     - '-c'
     - |
       source /secrets/firebase; \
-      gcloud beta run deploy chat-app \
+      gcloud beta run deploy node-chat-server \
       --allow-unauthenticated \
-      --image gcr.io/$PROJECT_ID/node-chat-app:$SHORT_SHA \
+      --image gcr.io/$PROJECT_ID/node-chat-server:$SHORT_SHA \
       --region us-central1 \
       --platform managed \
       --port 3000 \
@@ -47,4 +47,4 @@ steps:
   - name: 'secrets'
     path: '/secrets'
 images:
-- 'gcr.io/$PROJECT_ID/node-chat-app'
+- 'gcr.io/$PROJECT_ID/node-chat-server'
